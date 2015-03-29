@@ -1,6 +1,5 @@
+# load list of words
 require './words'
-
-
 
 class TweetSec 
 
@@ -8,21 +7,22 @@ class TweetSec
 
     # capture tweet sent to account
     def initialize(tweet)
-
         @original_tweet = tweet
-        puts $word_list['a']
     end
 
     #find words in tweet
     def find_words 
         @original_tweet.scan(/[A-Za-z]{2,}/) do |word|
-            puts word
+
+            if (validate_word(word)) 
+                puts word
+            end
         end
     end
 
     #check if the word is valid word
     def validate_word(word)
-
+        $word_list[word] ? true: false
 
     end
 
