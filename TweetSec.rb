@@ -3,7 +3,7 @@ require './words'
 
 class TweetSec 
 
-    attr_accessor :original_tweet, :modified_tweet, :word_list
+    attr_accessor :original_tweet, :modified_tweet
 
     # capture tweet sent to account
     def initialize(tweet)
@@ -13,6 +13,7 @@ class TweetSec
 
     #find words in tweet
     def find_words 
+        # find letter combos greater than two letters
         @original_tweet.scan(/[A-Za-z]{2,}/) do |word|
             if (validate_word(word)) 
                 replace_word(word)
@@ -23,7 +24,6 @@ class TweetSec
     #check if the word is in the $word_list
     def validate_word(word)
         $word_list[word] ? true: false
-
     end
 
  
@@ -35,34 +35,61 @@ class TweetSec
         @modified_tweet = @modified_tweet.gsub(/\b#{word}([^A-Za-z])/, 'a\1')
         # replace word if word is at end of tweet
         @modified_tweet = @modified_tweet.gsub(/([^A-Za-z])#{word}\b/, '\1a')
+        # replace word if word is the tweet
+        @modified_tweet = @modified_tweet.gsub(/\b#{word}\b/, 'a')
 
         puts @modified_tweet
     end 
 
-    # evaluate password strength
-        
-        # find number of character types 
-            # letters
-            # digits
-            # whitespace (spaces, tabs, newline)
-            # other 
-
     #calculate score
-        # tweet length * number of types
+    def calculate_score
+        @counts = { :letter_count => 0,
+            :digit_count => 0,
+            :whitespace_count => 0,
+            :other_count => 0 }
+
+        @score = 0
+
+        # iterate through each character, and count each type
+        puts @modified_tweet
+        @modified_tweet.each_byte do |c|
+            #letters (upper and lower)
+            if (c >=65 and c <= 90) or (c >=97 and c <= 122)
+                @counts[:letter_count] += 1
+            #numbers (0 to 9)
+            elsif c >=48 and c <= 57
+                @counts[:digit_count] += 1
+            # whitespace (tab, newline, space)
+            elsif  c == 9 or c ==10 or c == 32
+                @counts[:whitespace_count] += 1
+            # other 
+            else
+                @counts[:other_count] += 1
+            end
+        end
+        puts @counts
+
+        #find types whose counts > 0
+        @type_exists = @counts.select { |type|  @counts[type] > 0}
+        puts @type_exists.length
+
+        @score =  @type_exists.length * @modified_tweet.length
+        puts @score
+
+    end
 
     # show response
-        # strong: score >= 50
-            # congratulatory tweet
-        # weak: score < 50, score > 10
-            # modify original tweet so it is strong. 
-            # modified tweet shouldn't be longer than orginal
-            # unless it must be lengthened to increase score
-        # unacceptable: score >= 10
-            # ask user to use better password
+    def show_reponse
+    end
 
-    # post a reply tweet
+    # strengthen a weak tweet
+    # 13 * 4 = 52; 13 and 4 types is shortest allowable tweet
+    def strengthen_weak_password
+    end
 
-    # strengthen a week tweet
+    # change character to another type
+    def modify_char(character) 
+    end
 
 end
 
@@ -72,3 +99,4 @@ my_tweet = TweetSec.new(ARGV[0])
 
 
 my_tweet.find_words
+my_tweet.calculate_score
