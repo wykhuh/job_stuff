@@ -1,38 +1,62 @@
-class TweetSec 
-    attr_accessor :original_tweet, :modified_tweet
+require './words'
 
+
+
+class TweetSec 
+
+    attr_accessor :original_tweet, :modified_tweet, :word_list
+
+    # capture tweet sent to account
     def initialize(tweet)
+
         @original_tweet = tweet
-        puts @original_tweet
+        puts $word_list['a']
+    end
+
+    #find words in tweet
+    def find_words 
+        @original_tweet.scan(/[A-Za-z]{2,}/) do |word|
+            puts word
+        end
+    end
+
+    #check if the word is valid word
+    def validate_word(word)
+
 
     end
 
-    # capture tweet sent to account
+ 
+    #replace words with one letter
 
     # evaluate password strength
-        # replace words with one letter
-
+        
         # find number of character types 
             # letters
             # digits
             # whitespace (spaces, tabs, newline)
             # other 
 
-        #calculate score
-            # tweet length * number of types
+    #calculate score
+        # tweet length * number of types
 
-        # show response
-            # strong: score >= 50
-                # congratulatory tweet
-            # weak: score < 50, score > 10
-                # modify original tweet so it is strong. 
-                # modified tweet shouldn't be longer than orginal
-                # unless it must be lengthened to increase score
-            # unacceptable: score >= 10
-                # ask user to use better password
+    # show response
+        # strong: score >= 50
+            # congratulatory tweet
+        # weak: score < 50, score > 10
+            # modify original tweet so it is strong. 
+            # modified tweet shouldn't be longer than orginal
+            # unless it must be lengthened to increase score
+        # unacceptable: score >= 10
+            # ask user to use better password
 
     # post a reply tweet
 
 end
 
-test = TweetSec.new(ARGV[0])
+my_tweet = TweetSec.new(ARGV[0])
+
+#puts my_tweet.original_tweet
+
+
+my_tweet.find_words
