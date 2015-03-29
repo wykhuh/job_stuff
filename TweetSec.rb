@@ -8,19 +8,19 @@ class TweetSec
     # capture tweet sent to account
     def initialize(tweet)
         @original_tweet = tweet
+        @modified_tweet = @original_tweet
     end
 
     #find words in tweet
     def find_words 
         @original_tweet.scan(/[A-Za-z]{2,}/) do |word|
-
             if (validate_word(word)) 
-                puts word
+                replace_word(word)
             end
         end
     end
 
-    #check if the word is valid word
+    #check if the word is in the $word_list
     def validate_word(word)
         $word_list[word] ? true: false
 
@@ -28,6 +28,16 @@ class TweetSec
 
  
     #replace words with one letter
+    def replace_word(word)
+        # replace word if word is in the middle of the tweet
+        @modified_tweet = @modified_tweet.gsub(/([^A-Za-z])#{word}([^A-Za-z])/, '\1a\2')
+        # replace word if word is at the start of tweet
+        @modified_tweet = @modified_tweet.gsub(/\b#{word}([^A-Za-z])/, 'a\1')
+        # replace word if word is at end of tweet
+        @modified_tweet = @modified_tweet.gsub(/([^A-Za-z])#{word}\b/, '\1a')
+
+        puts @modified_tweet
+    end 
 
     # evaluate password strength
         
@@ -51,6 +61,8 @@ class TweetSec
             # ask user to use better password
 
     # post a reply tweet
+
+    # strengthen a week tweet
 
 end
 
