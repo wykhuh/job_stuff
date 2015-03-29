@@ -79,14 +79,16 @@ class TweetSec
 
         # iterate through each character, and count each type
         password.each_byte do |c|
-            #letters (upper or lower)
-            if (c >=65 and c <= 90) or (c >=97 and c <= 122)
+            # change byte into characcter
+            c = c.chr
+            #letters 
+            if /[A-Za-z]/.match(c)
                 @counts[:letter] += 1
-            #numbers (0 to 9)
-            elsif c >=48 and c <= 57
+            #numbers 
+            elsif /\d/.match(c)
                 @counts[:digit] += 1
-            # whitespace (tab, newline, space)
-            elsif  c == 9 or c ==10 or c == 32
+            # whitespace 
+            elsif  /[\t\n ]/.match(c)
                 @counts[:whitespace] += 1
             # other 
             else
@@ -128,7 +130,7 @@ class TweetSec
         if @modified_password.length >= @password_length_min
             replace_characters
 
-        # else if password length < minimum length, lengthen password and modify characters
+        # else lengthen password and modify characters
         else
             # add random character to beginning of password until password is minimum length
             while(@modified_password.length < @password_length_min)
@@ -153,13 +155,14 @@ class TweetSec
         @counts.select { |type|  @counts[type] == 0}
     end
 
-    # replace characters in the password
+    # replace characters in the password with characters from types that
+    # the password does not have
     def replace_characters
         # each type has regex and one random character  
         types_data = { 
             :letter => {'regex' => '[A-Za-z]',
                 'replace' => @letters_arr[rand(0..51)] }, 
-            :digit => {'regex' => '[0-9]',
+            :digit => {'regex' => '\d',
                 'replace' => @digits_arr[rand(0..9)].to_s },
             :whitespace => {'regex' => '[\t\n ]',
                 'replace' => ' ' },
