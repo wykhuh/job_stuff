@@ -107,20 +107,20 @@ class TweetSec
 
         # strong password : congrats
         if score >= @strong_password_min
-            puts 'Congrats. Password is strong'
+            puts "Congrats. Password is strong. Score: #{score}."
 
         # weak password : modify password
         elsif  score > @weak_password_min
+            puts "Password is weak. Score: #{score}."
             strengthen_weak_password
             score = calculate_score(@modified_password)
-            puts 'Password is weak. Here is a better password:', @modified_password
+            puts "Here is a better password:'#{@modified_password}'"
 
         # unacceptable : reject password
         else
-            puts 'Enter stronger password.'
+            puts "Enter stronger password. Score: #{score}."
         end
 
-        puts 'score: ' + score.to_s
     end
 
     # strengthen a weak password by adding types and/or characters
