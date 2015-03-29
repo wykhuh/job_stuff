@@ -51,7 +51,6 @@ class TweetSec
         @score = 0
 
         # iterate through each character, and count each type
-        puts @modified_tweet
         @modified_tweet.each_byte do |c|
             #letters (upper and lower)
             if (c >=65 and c <= 90) or (c >=97 and c <= 122)
@@ -70,16 +69,30 @@ class TweetSec
         puts @counts
 
         #find types whose counts > 0
-        @type_exists = @counts.select { |type|  @counts[type] > 0}
-        puts @type_exists.length
+        type_exists = @counts.select { |type|  @counts[type] > 0}
+        puts type_exists.length
 
-        @score =  @type_exists.length * @modified_tweet.length
+        @score =  type_exists.length * @modified_tweet.length
         puts @score
 
     end
 
     # show response
-    def show_reponse
+    def show_response
+        # strong password : congrats
+        if @score >= 50
+            puts 'Congrats. Tweet is strong'
+        # weak password : modify
+        elsif  @score > 10
+            puts 'weak'
+            # modify original tweet so it is strong. 
+            # modified tweet shouldn't be longer than orginal
+            # unless it must be lengthened to increase score
+
+        # unacceptable : reject
+        else
+            puts 'Enter stronger password'
+        end
     end
 
     # strengthen a weak tweet
@@ -100,3 +113,4 @@ my_tweet = TweetSec.new(ARGV[0])
 
 my_tweet.find_words
 my_tweet.calculate_score
+my_tweet.show_response
